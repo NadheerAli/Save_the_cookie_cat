@@ -1,15 +1,13 @@
 import pygame
 import sys
+from .config import * 
 
 class Game:
     def __init__(self):
         pygame.init()
 
-        width = 800
-        height = 600
-
-        self.surface = pygame.display.set_mode((width,height))
-        pygame.display.set_caption('See the light')
+        self.surface = pygame.display.set_mode((WIDTH,HEIGHT))
+        pygame.display.set_caption(TITLE)
         self.running = True
 
     def start(self):
