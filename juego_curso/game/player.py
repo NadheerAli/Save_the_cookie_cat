@@ -13,10 +13,10 @@ class Player(pygame.sprite.Sprite):
         self.rect.bottom = bottom
 
     def update_pos(self, dir):
-        if dir[pygame.K_RIGHT]:
+        if dir[pygame.K_RIGHT] and self.rect.x < WIDTH - 100:
             self.rect.x += 1
 
-        if dir[pygame.K_LEFT]:
+        if dir[pygame.K_LEFT] and self.rect.x > 100:
             self.rect.x -= 1
 
         # if dir == pygame.K_RIGHT:
