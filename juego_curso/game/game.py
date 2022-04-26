@@ -40,9 +40,10 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
-            if event.type == pygame.KEYDOWN:
-                print('activo')
-                self.player.update_pos(event.key)
+        # Este código ejecuta continuamente porque el atributo running sigue siendo true
+        key = pygame.key.get_pressed()
+        if key:
+            self.player.update_pos(key)
 
 
     def draw(self):
