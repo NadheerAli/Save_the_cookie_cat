@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 from .config import * 
 from .platform import Platform 
 from .player import Player 
@@ -12,6 +13,7 @@ class Game:
         self.surface = pygame.display.set_mode((WIDTH,HEIGHT))
         pygame.display.set_caption(TITLE)
         self.running = True
+        self.clock = pygame.time.Clock()
 
     def start(self):
         self.new()
@@ -29,7 +31,8 @@ class Game:
     def generateElements(self):
         self.platform = Platform()
         self.player = Player(100, self.platform.rect.top)
-        self.drill = Drill()
+        # Ajustar margen de aparición en lado derecho
+        self.drill = Drill(random.randrange(100, WIDTH-100), 0)
 
         self.sprites = pygame.sprite.Group()
         
@@ -49,7 +52,7 @@ class Game:
             self.player.update_pos(key)
 
         # Se llama aquí porque no se actualiza la posición con update() en el archivo Drill
-        self.drill.update_pos()
+        # self.drill.update_pos()
 
 
     def draw(self):
@@ -57,7 +60,9 @@ class Game:
         self.sprites.draw(self.surface)
 
     def update(self):
-        pygame.display.flip()
+        # pygame.display.flip()
+        # Ejecuta los métodos update de los sprites
+        self.sprites.update()
 
     def stop(self):
         pass
