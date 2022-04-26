@@ -3,6 +3,7 @@ import sys
 from .config import * 
 from .platform import Platform 
 from .player import Player 
+from .drill import Drill 
 
 class Game:
     def __init__(self):
@@ -28,11 +29,13 @@ class Game:
     def generateElements(self):
         self.platform = Platform()
         self.player = Player(100, self.platform.rect.top)
+        self.drill = Drill()
 
         self.sprites = pygame.sprite.Group()
         
         self.sprites.add(self.platform)
         self.sprites.add(self.player)
+        self.sprites.add(self.drill)
         
     def events(self):
         for event in pygame.event.get():
