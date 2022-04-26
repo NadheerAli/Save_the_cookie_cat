@@ -2,6 +2,7 @@ import pygame
 import sys
 from .config import * 
 from .platform import Platform 
+from .player import Player 
 
 class Game:
     def __init__(self):
@@ -26,8 +27,12 @@ class Game:
 
     def generateElements(self):
         self.platform = Platform()
+        self.player = Player(100, self.platform.rect.top)
+
         self.sprites = pygame.sprite.Group()
+        
         self.sprites.add(self.platform)
+        self.sprites.add(self.player)
         
     def events(self):
         for event in pygame.event.get():
