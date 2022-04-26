@@ -48,6 +48,9 @@ class Game:
         if key:
             self.player.update_pos(key)
 
+        # Se llama aquí porque no se actualiza la posición con update() en el archivo Drill
+        self.drill.update_pos()
+
 
     def draw(self):
         self.surface.fill(BACKGROUND_COLOR)
