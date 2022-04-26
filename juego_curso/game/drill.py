@@ -10,5 +10,5 @@ class Drill(pygame.sprite.Sprite):
         self.image.fill(RED)
 
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(1, WIDTH)
+        self.rect.x = random.randrange(100, WIDTH-100)
         self.rect.y = 0
