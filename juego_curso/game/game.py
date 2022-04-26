@@ -40,6 +40,11 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
+            if event.type == pygame.KEYDOWN:
+                print('activo')
+                self.player.update_pos(event.key)
+
+
     def draw(self):
         self.surface.fill(BACKGROUND_COLOR)
         self.sprites.draw(self.surface)

@@ -11,3 +11,10 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left = left
         self.rect.bottom = bottom
+
+    def update_pos(self, dir):
+        if dir == pygame.K_RIGHT:
+            self.rect.x += 1
+
+        if dir == pygame.K_LEFT:
+            self.rect.x -= 1
