@@ -48,8 +48,11 @@ class Game:
 
         # Este código ejecuta continuamente porque el atributo running sigue siendo true
         key = pygame.key.get_pressed()
-        if key:
-            self.player.update_pos(key)
+        if key[pygame.K_LEFT]:
+            self.player.update_pos_left()
+            
+        if key[pygame.K_RIGHT]:
+            self.player.update_pos_right()
 
         # Se llama aquí porque no se actualiza la posición con update() en el archivo Drill
         # self.drill.update_pos()
