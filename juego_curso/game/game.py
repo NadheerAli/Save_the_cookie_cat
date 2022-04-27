@@ -60,7 +60,7 @@ class Game:
         self.sprites.draw(self.surface)
 
     def update(self):
-        # pygame.display.flip()
+        pygame.display.flip()
         # Ejecuta los métodos update de los sprites
         self.sprites.update()
 
