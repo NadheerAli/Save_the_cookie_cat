@@ -42,11 +42,16 @@ class Game:
         self.generate_drills()
         
     def generate_drills(self):
-        # last_position = -100
+        top_last_position = -100
         if len(self.drills) == 0:
-            for drill in range(0, 2):
-                drill = Drill(0)
-                
+            for drill in range(0, 100):
+                left_random = DRILLS_GRID * random.randrange(1, 11)
+
+                drill = Drill(left_random, top_last_position)
+
+                random_gap_drills = random.randrange(100, DRILLS_GAP)
+                top_last_position = drill.rect.top - random_gap_drills
+
                 self.sprites.add(drill)
                 self.drills.add(drill)
 

@@ -10,6 +10,9 @@ TRANSPARENT = (125, 125, 125)
 GREEN = (0, 128, 0)
 RED = (125, 0, 0)
 
-DRILLS_GAP = 500
+DRILLS_GAP = 600
 SURFACE_LEFT_MARGIN = 100
 SURFACE_RIGHT_MARGIN = WIDTH - 100
+
+# Hasta aquí sigue la posibilidad de que aparezcan en un mismo espacio
+DRILLS_GRID = int((SURFACE_RIGHT_MARGIN - SURFACE_LEFT_MARGIN) / 10) # 600 - área en el que puede aparacer
