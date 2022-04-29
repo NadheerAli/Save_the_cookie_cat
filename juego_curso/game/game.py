@@ -1,3 +1,4 @@
+from tracemalloc import stop
 import pygame
 import sys
 import random
@@ -76,11 +77,15 @@ class Game:
     def draw(self):
         self.surface.fill(BACKGROUND_COLOR)
         self.sprites.draw(self.surface)
-        pygame.display.flip()
 
     def update(self):
+        pygame.display.flip()
         # Ejecuta los métodos update de los sprites
         self.sprites.update()
 
+        drill = self.player.collide_with(self.drills)
+        if drill:
+            self.stop()
+
     def stop(self):
-        pass
+        print('coli')
