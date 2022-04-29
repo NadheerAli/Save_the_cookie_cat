@@ -39,14 +39,13 @@ class Game:
         
         self.sprites.add(self.platform)
         self.sprites.add(self.player)
-        # self.sprites.add(self.drill)
         self.generate_drills()
         
     def generate_drills(self):
+        # last_position = -100
         if len(self.drills) == 0:
-            for drill in range(0, 5):
-                left = random.randrange(100, WIDTH-100)
-                drill = Drill(left, 0)
+            for drill in range(0, 2):
+                drill = Drill(0)
                 
                 self.sprites.add(drill)
                 self.drills.add(drill)
