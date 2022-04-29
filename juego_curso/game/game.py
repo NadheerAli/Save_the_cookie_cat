@@ -32,14 +32,25 @@ class Game:
         self.platform = Platform()
         self.player = Player(100, self.platform.rect.top)
         # Ajustar margen de aparición en lado derecho
-        self.drill = Drill(random.randrange(100, WIDTH-100), 0)
+        # self.drill = Drill(random.randrange(100, WIDTH-100), 0)
 
         self.sprites = pygame.sprite.Group()
+        self.drills = pygame.sprite.Group()
         
         self.sprites.add(self.platform)
         self.sprites.add(self.player)
-        self.sprites.add(self.drill)
+        # self.sprites.add(self.drill)
+        self.generate_drills()
         
+    def generate_drills(self):
+        if len(self.drills) == 0:
+            for drill in range(0, 5):
+                left = random.randrange(100, WIDTH-100)
+                drill = Drill(left, 0)
+                
+                self.sprites.add(drill)
+                self.drills.add(drill)
+
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -61,9 +72,9 @@ class Game:
     def draw(self):
         self.surface.fill(BACKGROUND_COLOR)
         self.sprites.draw(self.surface)
+        pygame.display.flip()
 
     def update(self):
-        pygame.display.flip()
         # Ejecuta los métodos update de los sprites
         self.sprites.update()
 
