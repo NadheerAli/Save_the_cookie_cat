@@ -6,6 +6,7 @@ from .config import *
 from .platform import Platform 
 from .player import Player 
 from .drill import Drill 
+from .cookie import Cookie 
 
 class Game:
     def __init__(self):
@@ -39,15 +40,17 @@ class Game:
 
         self.sprites = pygame.sprite.Group()
         self.drills = pygame.sprite.Group()
+        self.cookies = pygame.sprite.Group()
         
         self.sprites.add(self.platform)
         self.sprites.add(self.player)
         self.generate_drills()
+        self.generate_cookies()
         
     def generate_drills(self):
         top_last_position = -100
         if len(self.drills) == 0:
-            for drill in range(0, 59):
+            for drill in range(0, 5):
                 left_random = DRILLS_GRID * random.randrange(1, 11)
 
                 drill = Drill(left_random, top_last_position)
@@ -57,6 +60,20 @@ class Game:
 
                 self.sprites.add(drill)
                 self.drills.add(drill)
+
+    def generate_cookies(self):
+        top_last_position = -100
+        if len(self.cookies) == 0:
+            for cookie in range(0, 5):
+                left_random = DRILLS_GRID * random.randrange(1, 11)
+
+                cookie = Cookie(left_random, top_last_position)
+
+                random_gap_cookies = random.randrange(100, COOKIES_GAP)
+                top_last_position = cookie.rect.top - random_gap_cookies
+
+                self.sprites.add(cookie)
+                self.cookies.add(cookie)
 
     def events(self):
         for event in pygame.event.get():
@@ -90,7 +107,9 @@ class Game:
             self.delete_collided_drill(drill)
 
         self.delete_elements(self.drills)
+        self.delete_elements(self.cookies)
         self.generate_drills()
+        self.generate_cookies()
 
     def delete_collided_drill(self, drill):
         print('chocaste')
