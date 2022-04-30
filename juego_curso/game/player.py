@@ -19,8 +19,8 @@ class Player(pygame.sprite.Sprite):
 
     def update_pos_right(self):
         if self.rect.x < WIDTH - 140:
-            self.rect.x += 1
+            self.rect.x += PLAYER_SPEED
 
     def update_pos_left(self):
         if self.rect.x > 100:
-            self.rect.x -= 1
+            self.rect.x -= PLAYER_SPEED

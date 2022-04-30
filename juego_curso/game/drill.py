@@ -18,7 +18,7 @@ class Drill(pygame.sprite.Sprite):
     # Ajustar velocidad de caída
     def update(self):
         pygame.sprite.Sprite.update(self)
-        self.rect.top += 1
+        self.rect.top += DRILLS_SPEED
         
 
         # if self.rect.bottom == HEIGHT - 30:

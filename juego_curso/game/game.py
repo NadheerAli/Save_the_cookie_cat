@@ -14,6 +14,7 @@ class Game:
         self.surface = pygame.display.set_mode((WIDTH,HEIGHT))
         pygame.display.set_caption(TITLE)
         self.running = True
+
         self.clock = pygame.time.Clock()
 
     def start(self):
@@ -25,6 +26,7 @@ class Game:
 
     def run(self):
         while self.running:
+            self.clock.tick(FPS)
             self.events()
             self.draw()
             self.update()

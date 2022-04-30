@@ -14,5 +14,9 @@ DRILLS_GAP = 600
 SURFACE_LEFT_MARGIN = 100
 SURFACE_RIGHT_MARGIN = WIDTH - 100
 
+FPS = 60
+PLAYER_SPEED = 10
+DRILLS_SPEED = 10
+
 # Hasta aquí sigue la posibilidad de que aparezcan en un mismo espacio
 DRILLS_GRID = int((SURFACE_RIGHT_MARGIN - SURFACE_LEFT_MARGIN) / 10) # 600 - área en el que puede aparacer
