@@ -1,4 +1,4 @@
-from tracemalloc import stop
+import os
 import pygame
 import sys
 import random
@@ -17,6 +17,9 @@ class Game:
         self.running = True
 
         self.clock = pygame.time.Clock()
+
+        self.dir = os.path.dirname(__file__)
+        self.dir_sound = os.path.join(self.dir, 'sources/sounds')
 
     def start(self):
         self.new()
@@ -112,9 +115,17 @@ class Game:
         self.generate_drills()
         self.generate_cookies()
 
+        cookie = self.player.collide_with(self.cookies)
+        if cookie:
+            self.delete_collided_cookie(cookie)
+
     def delete_collided_drill(self, drill):
         print('chocaste')
         drill.kill()
+
+    def delete_collided_cookie(self, cookie):
+        print('galleta')
+        cookie.kill()
 
     def delete_elements(self, elements):
         for element in elements:
