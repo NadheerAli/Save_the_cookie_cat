@@ -50,7 +50,7 @@ class Game:
     def generate_drills(self):
         top_last_position = -100
         if len(self.drills) == 0:
-            for drill in range(0, 5):
+            for drill in range(0, MAX_DRILLS):
                 left_random = DRILLS_GRID * random.randrange(1, 11)
 
                 drill = Drill(left_random, top_last_position)
@@ -64,7 +64,7 @@ class Game:
     def generate_cookies(self):
         top_last_position = -800
         if len(self.cookies) == 0:
-            for cookie in range(0, 2):
+            for cookie in range(0, MAX_COOKIES):
                 left_random = DRILLS_GRID * random.randrange(1, 11)
 
                 cookie = Cookie(left_random, top_last_position)
@@ -103,6 +103,7 @@ class Game:
         self.sprites.update()
 
         drill = self.player.collide_with(self.drills)
+
         if drill:
             self.delete_collided_drill(drill)
 
