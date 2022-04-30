@@ -87,5 +87,12 @@ class Game:
         if drill:
             self.stop()
 
+        self.delete_elements(self.drills)
+
+    def delete_elements(self, elements):
+        for element in elements:
+            if element.rect.top > HEIGHT - 30:
+                element.kill()
+
     def stop(self):
         print('coli')
