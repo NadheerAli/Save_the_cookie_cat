@@ -45,7 +45,7 @@ class Game:
     def generate_drills(self):
         top_last_position = -100
         if len(self.drills) == 0:
-            for drill in range(0, 100):
+            for drill in range(0, 59):
                 left_random = DRILLS_GRID * random.randrange(1, 11)
 
                 drill = Drill(left_random, top_last_position)
@@ -85,9 +85,14 @@ class Game:
 
         drill = self.player.collide_with(self.drills)
         if drill:
-            self.stop()
+            self.delete_collided_drill(drill)
 
         self.delete_elements(self.drills)
+        self.generate_drills()
+
+    def delete_collided_drill(self, drill):
+        print('chocaste')
+        drill.kill()
 
     def delete_elements(self, elements):
         for element in elements:
