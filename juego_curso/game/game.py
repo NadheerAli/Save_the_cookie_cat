@@ -19,7 +19,7 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.dir = os.path.dirname(__file__)
-        self.dir_sound = os.path.join(self.dir, 'sources/sounds')
+        self.dir_sound = os.path.join(self.dir, 'sources/sounds/')
 
     def start(self):
         self.new()
@@ -110,21 +110,26 @@ class Game:
         if drill:
             self.delete_collided_drill(drill)
 
+        cookie = self.player.collide_with(self.cookies)
+
+        if cookie:
+            self.delete_collided_cookie(cookie)
+
         self.delete_elements(self.drills)
         self.delete_elements(self.cookies)
         self.generate_drills()
         self.generate_cookies()
 
-        cookie = self.player.collide_with(self.cookies)
-        if cookie:
-            self.delete_collided_cookie(cookie)
-
     def delete_collided_drill(self, drill):
         print('chocaste')
+        sound = pygame.mixer.Sound(os.path.join(self.dir_sound, 'drill.wav'))
+        sound.play()
         drill.kill()
 
     def delete_collided_cookie(self, cookie):
         print('galleta')
+        sound = pygame.mixer.Sound(os.path.join(self.dir_sound, 'cookie.wav'))
+        sound.play()
         cookie.kill()
 
     def delete_elements(self, elements):
