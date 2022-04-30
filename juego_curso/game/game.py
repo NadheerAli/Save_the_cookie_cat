@@ -25,6 +25,7 @@ class Game:
         self.new()
 
     def new(self):
+        self.score = 0
         self.generateElements()
         self.run()
 
@@ -113,12 +114,17 @@ class Game:
         cookie = self.player.collide_with(self.cookies)
 
         if cookie:
+            self.update_score()    
             self.delete_collided_cookie(cookie)
 
         self.delete_elements(self.drills)
         self.delete_elements(self.cookies)
         self.generate_drills()
         self.generate_cookies()
+
+    def update_score(self):
+        self.score += 1
+        print(self.score)
 
     def delete_collided_drill(self, drill):
         print('chocaste')
