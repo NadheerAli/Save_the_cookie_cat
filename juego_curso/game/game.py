@@ -62,14 +62,14 @@ class Game:
                 self.drills.add(drill)
 
     def generate_cookies(self):
-        top_last_position = -100
+        top_last_position = -800
         if len(self.cookies) == 0:
-            for cookie in range(0, 5):
+            for cookie in range(0, 2):
                 left_random = DRILLS_GRID * random.randrange(1, 11)
 
                 cookie = Cookie(left_random, top_last_position)
 
-                random_gap_cookies = random.randrange(100, COOKIES_GAP)
+                random_gap_cookies = random.randrange(400, COOKIES_GAP)
                 top_last_position = cookie.rect.top - random_gap_cookies
 
                 self.sprites.add(cookie)

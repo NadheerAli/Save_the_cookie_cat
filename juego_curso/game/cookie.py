@@ -15,5 +15,5 @@ class Cookie(pygame.sprite.Sprite):
     # Ajustar velocidad de caída
     def update(self):
         pygame.sprite.Sprite.update(self)
-        self.rect.top += DRILLS_SPEED + 50
+        self.rect.top += DRILLS_SPEED
         
