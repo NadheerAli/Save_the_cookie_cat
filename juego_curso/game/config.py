@@ -1,4 +1,5 @@
 import random
+from pathlib import Path
 
 WIDTH = 800
 HEIGHT = 600
@@ -24,3 +25,8 @@ MAX_DRILLS = 8
 MAX_COOKIES = 5
 # Hasta aquí sigue la posibilidad de que aparezcan en un mismo espacio
 DRILLS_GRID = int((SURFACE_RIGHT_MARGIN - SURFACE_LEFT_MARGIN) / 10) # 600 - área en el que puede aparacer
+
+# Paths(?)
+CURRENT_DIRECTORY = Path.cwd()
+PATH = Path(CURRENT_DIRECTORY)
+SCORE_DIRECTORY = PATH / 'game/sources/score.txt'

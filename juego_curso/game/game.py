@@ -22,17 +22,6 @@ class Game:
         self.dir = os.path.dirname(__file__)
         self.dir_sound = os.path.join(self.dir, 'sources/sounds/')
 
-        current_directory = Path.cwd()
-        path = Path(current_directory)
-
-        self.score_folder = path / 'game/sources' 
-        
-    def read_score(self, score_path):
-        if score_path.exists():
-            for dir in score_path.iterdir():
-                if dir.name == 'score.txt' and dir.suffix == '.txt':
-                    print(dir.read_text())
-
     def start(self):
         self.new()
 
@@ -145,16 +134,21 @@ class Game:
         drill.kill()
 
     def delete_collided_cookie(self, cookie):
-        print('galleta')
+        # print('galleta')
         sound = pygame.mixer.Sound(os.path.join(self.dir_sound, 'cookie.wav'))
         sound.play()
-        self.read_score(self.score_folder)
+        score = self.read_score(SCORE_DIRECTORY)
+        print(score)
         cookie.kill()
 
     def delete_elements(self, elements):
         for element in elements:
             if element.rect.top > HEIGHT - 30:
                 element.kill()
+
+    def read_score(self, score_path):
+        if score_path.exists() and score_path.name == 'score.txt':
+            print(score_path.read_text())
 
     def stop(self):
         print('coli')
