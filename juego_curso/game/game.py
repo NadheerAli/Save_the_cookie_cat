@@ -2,6 +2,7 @@ import os
 import pygame
 import sys
 import random
+from pathlib import Path
 from .config import * 
 from .platform import Platform 
 from .player import Player 
@@ -20,6 +21,17 @@ class Game:
 
         self.dir = os.path.dirname(__file__)
         self.dir_sound = os.path.join(self.dir, 'sources/sounds/')
+
+        current_directory = Path.cwd()
+        path = Path(current_directory)
+
+        self.score_folder = path / 'game/sources' 
+        
+    def read_score(self, score_path):
+        if score_path.exists():
+            for dir in score_path.iterdir():
+                if dir.name == 'score.txt' and dir.suffix == '.txt':
+                    print(dir.read_text())
 
     def start(self):
         self.new()
@@ -136,6 +148,7 @@ class Game:
         print('galleta')
         sound = pygame.mixer.Sound(os.path.join(self.dir_sound, 'cookie.wav'))
         sound.play()
+        self.read_score(self.score_folder)
         cookie.kill()
 
     def delete_elements(self, elements):
