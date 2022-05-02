@@ -27,8 +27,13 @@ class Game:
 
     def new(self):
         self.score = 0
+        self.start_score(self.score)
         self.generateElements()
         self.run()
+
+    def start_score(self, score):
+        print('la puntuación actual es de:', score)
+        SCORE_DIRECTORY.write_text(str(score))
 
     def run(self):
         while self.running:
@@ -125,7 +130,8 @@ class Game:
 
     def update_score(self):
         self.score += 1
-        print(self.score)
+        SCORE_DIRECTORY.write_text(str(self.score))
+        self.read_score()
 
     def delete_collided_drill(self, drill):
         print('chocaste')
@@ -137,8 +143,7 @@ class Game:
         # print('galleta')
         sound = pygame.mixer.Sound(os.path.join(self.dir_sound, 'cookie.wav'))
         sound.play()
-        score = self.read_score(SCORE_DIRECTORY)
-        print(score)
+        # score = self.read_score(SCORE_DIRECTORY)
         cookie.kill()
 
     def delete_elements(self, elements):
@@ -146,9 +151,9 @@ class Game:
             if element.rect.top > HEIGHT - 30:
                 element.kill()
 
-    def read_score(self, score_path):
-        if score_path.exists() and score_path.name == 'score.txt':
-            print(score_path.read_text())
+    def read_score(self):
+        if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
+            print(SCORE_DIRECTORY.read_text())
 
     def stop(self):
         print('coli')
