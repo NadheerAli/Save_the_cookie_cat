@@ -1,3 +1,4 @@
 pendientes:
 
 cómo hacer color transparente
+cambio de fuente

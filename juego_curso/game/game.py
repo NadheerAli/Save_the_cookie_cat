@@ -3,6 +3,7 @@ import pygame
 import sys
 import random
 from pathlib import Path
+
 from .config import * 
 from .platform import Platform 
 from .player import Player 
@@ -21,6 +22,8 @@ class Game:
 
         self.dir = os.path.dirname(__file__)
         self.dir_sound = os.path.join(self.dir, 'sources/sounds/')
+
+        self.font = pygame.font.match_font(FONT)
 
     def start(self):
         self.new()
@@ -105,6 +108,7 @@ class Game:
 
     def draw(self):
         self.surface.fill(BACKGROUND_COLOR)
+        self.draw_score()
         self.sprites.draw(self.surface)
 
     def update(self):
@@ -120,7 +124,8 @@ class Game:
         cookie = self.player.collide_with(self.cookies)
 
         if cookie:
-            self.update_score()    
+            self.update_score()
+            self.read_score()
             self.delete_collided_cookie(cookie)
 
         self.delete_elements(self.drills)
@@ -131,7 +136,6 @@ class Game:
     def update_score(self):
         self.score += 1
         SCORE_DIRECTORY.write_text(str(self.score))
-        self.read_score()
 
     def delete_collided_drill(self, drill):
         print('chocaste')
@@ -157,3 +161,14 @@ class Game:
 
     def stop(self):
         print('coli')
+
+    def draw_score(self):
+        self.display_score( str(self.score), 36, WHITE, WIDTH // 2, 40)
+
+    def display_score(self, text, size, color, pos_x, pos_y):
+        font = pygame.font.Font(self.font, size)
+        text = font.render(text, True, color)
+        rect = text.get_rect()
+        rect.midtop = (pos_x, pos_y)
+
+        self.surface.blit(text, rect)
