@@ -30,6 +30,7 @@ class Game:
 
     def new(self):
         self.score = 0
+        self.level = 0
         self.start_score(self.score)
         self.generateElements()
         self.run()
@@ -58,7 +59,6 @@ class Game:
         self.sprites.add(self.platform)
         self.sprites.add(self.player)
         self.generate_drills()
-        self.generate_cookies()
         
     def generate_drills(self):
         top_last_position = -100
@@ -73,6 +73,9 @@ class Game:
 
                 self.sprites.add(drill)
                 self.drills.add(drill)
+
+            self.level += 1
+            self.generate_cookies()
 
     def generate_cookies(self):
         top_last_position = -800
@@ -163,9 +166,10 @@ class Game:
         print('coli')
 
     def draw_score(self):
-        self.display_score( str(self.score), 36, WHITE, WIDTH // 2, 40)
+        self.display_text( str(self.score), 36, WHITE, WIDTH // 2, 40)
+        self.display_text( str(self.level), 36, WHITE, 100, 70)
 
-    def display_score(self, text, size, color, pos_x, pos_y):
+    def display_text(self, text, size, color, pos_x, pos_y):
         font = pygame.font.Font(self.font, size)
         text = font.render(text, True, color)
         rect = text.get_rect()
