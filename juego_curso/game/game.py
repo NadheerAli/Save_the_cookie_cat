@@ -17,6 +17,7 @@ class Game:
         self.surface = pygame.display.set_mode((WIDTH,HEIGHT))
         pygame.display.set_caption(TITLE)
         self.running = True
+        self.playing = True
 
         self.clock = pygame.time.Clock()
 
@@ -112,30 +113,31 @@ class Game:
 
     def draw(self):
         self.surface.fill(BACKGROUND_COLOR)
-        self.draw_score()
+        self.draw_text()        
         self.sprites.draw(self.surface)
         pygame.display.flip()
 
     def update(self):
-        # Ejecuta los métodos update de los sprites
-        self.sprites.update()
+        if self.playing:
+            # Ejecuta los métodos update de los sprites
+            self.sprites.update()
 
-        drill = self.player.collide_with(self.drills)
+            drill = self.player.collide_with(self.drills)
 
-        if drill:
-            self.delete_collided_drill(drill)
+            if drill:
+                self.delete_collided_drill(drill)
 
-        cookie = self.player.collide_with(self.cookies)
+            cookie = self.player.collide_with(self.cookies)
 
-        if cookie:
-            self.update_score()
-            self.read_score()
-            self.delete_collided_cookie(cookie)
+            if cookie:
+                self.update_score()
+                self.read_score()
+                self.delete_collided_cookie(cookie)
 
-        self.delete_elements(self.drills)
-        self.delete_elements(self.cookies)
-        self.generate_drills()
-        self.generate_cookies()
+            self.delete_elements(self.drills)
+            self.delete_elements(self.cookies)
+            self.generate_drills()
+            self.generate_cookies()
 
     def update_score(self):
         self.score += 1
@@ -181,15 +183,34 @@ class Game:
         self.player.stop()
         self.stop_elements(self.drills)
         self.stop_elements(self.cookies)
+        self.playing = False
+    
+    def score_format(self):
+        return 'Score : {}'.format(self.score)
 
-    def draw_score(self):
-        self.display_text( str(self.score), 36, WHITE, WIDTH // 2, 40)
-        self.display_text( str(self.level), 36, WHITE, 100, 70)
+    def level_format(self):
+        return 'Level : {}'.format(self.level)
 
-    def display_text(self, text, size, color, pos_x, pos_y):
+    def lives_format(self):
+        contador = ''
+        for live in range(self.lives):
+            contador += 'X '
+        return 'Lives: {}'.format(contador)
+
+    def draw_text(self):
+        self.display_text( self.score_format(), FONT_SIZE, WHITE, WIDTH // 2, POS_Y)
+        self.display_text( self.level_format(), FONT_SIZE, WHITE, 100, POS_Y)
+        self.display_text( self.lives_format(), FONT_SIZE, WHITE, (WIDTH - 180), POS_Y, False)
+
+    def display_text(self, text, size, color, pos_x, pos_y, align_center = True):
         font = pygame.font.Font(self.font, size)
         text = font.render(text, True, color)
         rect = text.get_rect()
-        rect.midtop = (pos_x, pos_y)
+
+        if align_center:
+            rect.midtop = (pos_x, pos_y)
+        else:
+            rect.x = pos_x
+            rect.y = pos_y
 
         self.surface.blit(text, rect)
