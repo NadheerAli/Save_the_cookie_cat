@@ -12,15 +12,20 @@ class Player(pygame.sprite.Sprite):
         self.rect.left = left
         self.rect.bottom = bottom
 
+        self.can_move = True
+
     def collide_with(self, sprites):
         objects = pygame.sprite.spritecollide(self, sprites, False)
         if objects:
             return objects[0]
 
     def update_pos_right(self):
-        if self.rect.x < WIDTH - 140:
+        if self.rect.x < WIDTH - 140 and self.can_move:
             self.rect.x += PLAYER_SPEED
 
     def update_pos_left(self):
-        if self.rect.x > 100:
+        if self.rect.x > 100 and self.can_move:
             self.rect.x -= PLAYER_SPEED
+
+    def stop(self):
+        self.can_move = False

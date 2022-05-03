@@ -1,6 +1,8 @@
 import random
 from pathlib import Path
 
+LIVES = 3
+
 WIDTH = 800
 HEIGHT = 600
 

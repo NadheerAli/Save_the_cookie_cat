@@ -31,6 +31,7 @@ class Game:
     def new(self):
         self.score = 0
         self.level = 0
+        self.lives = LIVES
         self.start_score(self.score)
         self.generateElements()
         self.run()
@@ -43,8 +44,8 @@ class Game:
         while self.running:
             self.clock.tick(FPS)
             self.events()
-            self.draw()
             self.update()
+            self.draw()
 
     def generateElements(self):
         self.platform = Platform()
@@ -113,9 +114,9 @@ class Game:
         self.surface.fill(BACKGROUND_COLOR)
         self.draw_score()
         self.sprites.draw(self.surface)
+        pygame.display.flip()
 
     def update(self):
-        pygame.display.flip()
         # Ejecuta los métodos update de los sprites
         self.sprites.update()
 
@@ -141,10 +142,20 @@ class Game:
         SCORE_DIRECTORY.write_text(str(self.score))
 
     def delete_collided_drill(self, drill):
-        print('chocaste')
+        self.lost_live()
         sound = pygame.mixer.Sound(os.path.join(self.dir_sound, 'drill.wav'))
         sound.play()
         drill.kill()
+
+    def lost_live(self):
+        self.lives -= 1
+        
+        # Código para mostrar una vida menos
+        print('tienes', self.lives, 'vidas')
+
+        # Código para terminar el juego
+        if self.lives == 0:
+            self.stop()
 
     def delete_collided_cookie(self, cookie):
         # print('galleta')
@@ -162,8 +173,14 @@ class Game:
         if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
             print(SCORE_DIRECTORY.read_text())
 
+    def stop_elements(self, elements):
+        for element in elements:
+            element.stop()
+
     def stop(self):
-        print('coli')
+        self.player.stop()
+        self.stop_elements(self.drills)
+        self.stop_elements(self.cookies)
 
     def draw_score(self):
         self.display_text( str(self.score), 36, WHITE, WIDTH // 2, 40)
