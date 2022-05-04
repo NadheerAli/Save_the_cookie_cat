@@ -1,4 +1,5 @@
 import os
+from pickle import TRUE
 import pygame
 import sys
 import random
@@ -17,7 +18,7 @@ class Game:
         self.surface = pygame.display.set_mode((WIDTH,HEIGHT))
         pygame.display.set_caption(TITLE)
         self.running = True
-        self.playing = True
+        
 
         self.clock = pygame.time.Clock()
 
@@ -27,9 +28,11 @@ class Game:
         self.font = pygame.font.match_font(FONT)
 
     def start(self):
+        self.menu()
         self.new()
 
     def new(self):
+        self.playing = True
         self.score = 0
         self.level = 0
         self.lives = LIVES
@@ -106,6 +109,9 @@ class Game:
             
         if key[pygame.K_RIGHT]:
             self.player.update_pos_right()
+
+        if key[pygame.K_SPACE] and not self.playing:
+            self.new()
 
         # Se llama aquí porque no se actualiza la posición con update() en el archivo Drill
         # self.drill.update_pos()
@@ -194,13 +200,17 @@ class Game:
     def lives_format(self):
         contador = ''
         for live in range(self.lives):
-            contador += 'X '
+            contador += ' x '
         return 'Lives: {}'.format(contador)
 
     def draw_text(self):
         self.display_text( self.score_format(), FONT_SIZE, WHITE, WIDTH // 2, POS_Y)
         self.display_text( self.level_format(), FONT_SIZE, WHITE, 100, POS_Y)
         self.display_text( self.lives_format(), FONT_SIZE, WHITE, (WIDTH - 180), POS_Y, False)
+
+        if not self.playing:
+            self.display_text('Perdiste', FONT_SIZE + 40, WHITE, WIDTH // 2, HEIGHT // 2 - 20)
+            self.display_text('Presiona la BARRA DE ESPACIO para volver a jugar', FONT_SIZE - 10, WHITE, WIDTH // 2, HEIGHT // 2 + 50)
 
     def display_text(self, text, size, color, pos_x, pos_y, align_center = True):
         font = pygame.font.Font(self.font, size)
@@ -214,3 +224,23 @@ class Game:
             rect.y = pos_y
 
         self.surface.blit(text, rect)
+
+    def menu(self):
+        self.surface.fill(MENU_COLOR)
+        self.display_text('Presiona una tecla', FONT_SIZE, WHITE, WIDTH // 2, HEIGHT // 2)
+        pygame.display.flip()
+        self.wait()
+
+    def wait(self):
+        wait = TRUE
+
+        while wait:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    wait = False
+                    self.running = False
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.KEYUP:
+                    wait = False

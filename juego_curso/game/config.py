@@ -3,8 +3,7 @@ from pathlib import Path
 
 LIVES = 3
 
-POS_Y = 20
-FONT_SIZE = 30
+
 
 WIDTH = 800
 HEIGHT = 600
@@ -17,6 +16,7 @@ GREEN = (0, 128, 0)
 RED = (125, 0, 0)
 BLUE = (0, 0, 125)
 WHITE = (255, 255, 255)
+MENU_COLOR = (200, 0, 0)
 
 DRILLS_GAP = 600
 COOKIES_GAP = 1000
@@ -37,4 +37,6 @@ CURRENT_DIRECTORY = Path.cwd()
 PATH = Path(CURRENT_DIRECTORY)
 SCORE_DIRECTORY = PATH / 'game/sources/score.txt'
 
-FONT = 'Arial'
+FONT = 'Arial bold'
+POS_Y = 20
+FONT_SIZE = 36
