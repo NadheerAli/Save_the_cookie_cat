@@ -1,3 +1,4 @@
+import os
 import random
 from pathlib import Path
 
@@ -17,10 +18,10 @@ WHITE = (255, 255, 255)
 BLACK = (0 ,0 ,0)
 MENU_COLOR = (200, 0, 0)
 
-DRILLS_GAP = 600
-COOKIES_GAP = 1000
-SURFACE_LEFT_MARGIN = 100
-SURFACE_RIGHT_MARGIN = WIDTH - 100
+DRILLS_GAP = 300
+COOKIES_GAP = 800
+SURFACE_MARGIN_LEFT = 0
+SURFACE_MARGIN_RIGHT = WIDTH - 70
 
 FPS = 60
 PLAYER_SPEED = 10
@@ -28,8 +29,9 @@ DRILLS_SPEED = 10
 
 MAX_DRILLS = 8
 MAX_COOKIES = 5
+
 # Hasta aquí sigue la posibilidad de que aparezcan en un mismo espacio
-DRILLS_GRID = int((SURFACE_RIGHT_MARGIN - SURFACE_LEFT_MARGIN) / 10) # 600 - área en el que puede aparacer
+DRILLS_GRID = int((SURFACE_MARGIN_RIGHT - SURFACE_MARGIN_LEFT) / 14) # 730 - área en el que puede aparacer
 
 # Paths(?)
 CURRENT_DIRECTORY = Path.cwd()

@@ -72,7 +72,7 @@ class Game:
         top_last_position = -100
         if len(self.drills) == 0:
             for drill in range(0, MAX_DRILLS):
-                left_random = DRILLS_GRID * random.randrange(1, 11)
+                left_random = DRILLS_GRID * random.randrange(1, 15)
 
                 drill = Drill(left_random, top_last_position, self.dir_images)
 
@@ -89,7 +89,7 @@ class Game:
         top_last_position = -800
         if len(self.cookies) == 0:
             for cookie in range(0, MAX_COOKIES):
-                left_random = DRILLS_GRID * random.randrange(1, 11)
+                left_random = DRILLS_GRID * random.randrange(1, 15)
 
                 cookie = Cookie(left_random, top_last_position, self.dir_images)
 
