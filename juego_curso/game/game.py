@@ -105,11 +105,13 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
+            
+
         # Este código ejecuta continuamente porque el atributo running sigue siendo true
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
             self.player.update_pos_left()
-            
+
         if key[pygame.K_RIGHT]:
             self.player.update_pos_right()
 
