@@ -1,15 +1,17 @@
+import os
 import pygame
 import random
 from .config import *
 
 
 class Drill(pygame.sprite.Sprite):
-    def __init__(self, left, top):
+    def __init__(self, left, top, dir_image):
         pygame.sprite.Sprite.__init__(self)
         # self.vel_y = 0
 
-        self.image = pygame.Surface((50,50))
-        self.image.fill(RED)
+        # self.image = pygame.Surface((50,50))
+        # self.image.fill(RED)
+        self.image = pygame.image.load(os.path.join(dir_image, 'drill.png'))
 
         self.rect = self.image.get_rect()
         self.rect.left = left

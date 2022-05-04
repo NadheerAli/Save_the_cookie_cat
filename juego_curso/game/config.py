@@ -3,19 +3,18 @@ from pathlib import Path
 
 LIVES = 3
 
-
-
 WIDTH = 800
 HEIGHT = 600
 
 TITLE = 'See the light'
 
 BACKGROUND_COLOR = (136, 216, 192 )
-TRANSPARENT = (125, 125, 125)
+# TRANSPARENT = 
 GREEN = (0, 128, 0)
 RED = (125, 0, 0)
 BLUE = (0, 0, 125)
 WHITE = (255, 255, 255)
+BLACK = (0 ,0 ,0)
 MENU_COLOR = (200, 0, 0)
 
 DRILLS_GAP = 600

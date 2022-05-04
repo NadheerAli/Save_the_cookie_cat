@@ -1,12 +1,14 @@
+import os
 import pygame
 from .config import *
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, left, bottom):
+    def __init__(self, left, bottom, dir_image):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.Surface((40, 40))
-        self.image.fill(GREEN)
+        # self.image = pygame.Surface((40, 40))
+        # self.image.fill(GREEN)
+        self.image = pygame.image.load(os.path.join(dir_image, 'steven.png'))
 
         self.rect = self.image.get_rect()
         self.rect.left = left

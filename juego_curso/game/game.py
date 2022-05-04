@@ -24,6 +24,7 @@ class Game:
 
         self.dir = os.path.dirname(__file__)
         self.dir_sound = os.path.join(self.dir, 'sources/sounds/')
+        self.dir_images = os.path.join(self.dir, 'sources/sprites/')
 
         self.font = pygame.font.match_font(FONT)
 
@@ -36,8 +37,9 @@ class Game:
         self.score = 0
         self.level = 0
         self.lives = LIVES
+        self.background = pygame.image.load(os.path.join(self.dir_images, 'background.png'))
         self.start_score(self.score)
-        self.generateElements()
+        self.generate_elements()
         self.run()
 
     def start_score(self, score):
@@ -51,9 +53,10 @@ class Game:
             self.update()
             self.draw()
 
-    def generateElements(self):
+    def generate_elements(self):
         self.platform = Platform()
-        self.player = Player(100, self.platform.rect.top)
+        self.player = Player(100, self.platform.rect.top, self.dir_images)
+
         # Ajustar margen de aparición en lado derecho
         # self.drill = Drill(random.randrange(100, WIDTH-100), 0)
 
@@ -71,7 +74,7 @@ class Game:
             for drill in range(0, MAX_DRILLS):
                 left_random = DRILLS_GRID * random.randrange(1, 11)
 
-                drill = Drill(left_random, top_last_position)
+                drill = Drill(left_random, top_last_position, self.dir_images)
 
                 random_gap_drills = random.randrange(100, DRILLS_GAP)
                 top_last_position = drill.rect.top - random_gap_drills
@@ -88,7 +91,7 @@ class Game:
             for cookie in range(0, MAX_COOKIES):
                 left_random = DRILLS_GRID * random.randrange(1, 11)
 
-                cookie = Cookie(left_random, top_last_position)
+                cookie = Cookie(left_random, top_last_position, self.dir_images)
 
                 random_gap_cookies = random.randrange(400, COOKIES_GAP)
                 top_last_position = cookie.rect.top - random_gap_cookies
@@ -118,9 +121,9 @@ class Game:
 
 
     def draw(self):
-        self.surface.fill(BACKGROUND_COLOR)
-        self.draw_text()        
+        self.surface.blit(self.background, (0,0))
         self.sprites.draw(self.surface)
+        self.draw_text()        
         pygame.display.flip()
 
     def update(self):
@@ -204,13 +207,13 @@ class Game:
         return 'Lives: {}'.format(contador)
 
     def draw_text(self):
-        self.display_text( self.score_format(), FONT_SIZE, WHITE, WIDTH // 2, POS_Y)
-        self.display_text( self.level_format(), FONT_SIZE, WHITE, 100, POS_Y)
-        self.display_text( self.lives_format(), FONT_SIZE, WHITE, (WIDTH - 180), POS_Y, False)
+        self.display_text( self.score_format(), FONT_SIZE, BLACK, WIDTH // 2, POS_Y)
+        self.display_text( self.level_format(), FONT_SIZE, BLACK, 100, POS_Y)
+        self.display_text( self.lives_format(), FONT_SIZE, BLACK, (WIDTH - 180), POS_Y, False)
 
         if not self.playing:
-            self.display_text('Perdiste', FONT_SIZE + 40, WHITE, WIDTH // 2, HEIGHT // 2 - 20)
-            self.display_text('Presiona la BARRA DE ESPACIO para volver a jugar', FONT_SIZE - 10, WHITE, WIDTH // 2, HEIGHT // 2 + 50)
+            self.display_text('Perdiste', FONT_SIZE + 40, BLACK, WIDTH // 2, HEIGHT // 2 - 20)
+            self.display_text('Presiona la BARRA DE ESPACIO para volver a jugar', FONT_SIZE - 10, BLACK, WIDTH // 2, HEIGHT // 2 + 50)
 
     def display_text(self, text, size, color, pos_x, pos_y, align_center = True):
         font = pygame.font.Font(self.font, size)
