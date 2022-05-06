@@ -231,13 +231,11 @@ class Game:
         self.surface.blit(text, rect)
 
     def menu(self):
-        self.surface.fill(MENU_COLOR)
-        self.display_text('Presiona una tecla', FONT_SIZE, WHITE, WIDTH // 2, HEIGHT // 2)
-        pygame.display.flip()
-        self.wait()
-
-    def wait(self):
         wait = TRUE
+
+        menu_img = pygame.image.load(os.path.join(self.dir_images, 'menu.jpg'))
+        rect = menu_img.get_rect()
+        rect.center = (WIDTH // 2, HEIGHT // 2)
 
         while wait:
             for event in pygame.event.get():
@@ -247,5 +245,10 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-                if event.type == pygame.KEYUP:
+                
+                key = pygame.key.get_pressed()
+                if key[pygame.K_SPACE]:
                     wait = False
+
+            self.surface.blit(menu_img, rect)
+            pygame.display.update()
