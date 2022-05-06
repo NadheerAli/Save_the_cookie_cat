@@ -38,6 +38,8 @@ CURRENT_DIRECTORY = Path.cwd()
 PATH = Path(CURRENT_DIRECTORY)
 SCORE_DIRECTORY = PATH / 'game/sources/score.txt'
 
+GAME_VOL = 0.8
+
 FONT = 'Arial bold'
 POS_Y = 20
 FONT_SIZE = 36

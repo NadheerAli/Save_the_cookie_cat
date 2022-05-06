@@ -29,17 +29,19 @@ class Game:
         self.font = pygame.font.match_font(FONT)
 
         pygame.mixer.music.load('game/sources/sounds/theme.mp3')
-        pygame.mixer.music.set_volume(1.0) # Float 0.0 - 1.0
+        pygame.mixer.music.set_volume(GAME_VOL) # Float 0.0 - 1.0
         pygame.mixer.music.play(-1, 0.0)
 
     def start(self):
-        self.menu()
+        self.start_menu()
+        self.instructions_menu()
         self.new()
 
     def new(self):
         self.playing = True
         self.score = 0
         self.level = 0
+        self.score_message = ''
         self.lives = LIVES
         self.background = pygame.image.load(os.path.join(self.dir_images, 'background.png'))
         # self.start_score(self.score)
@@ -162,17 +164,16 @@ class Game:
             content = self.read_score()
                 
             if content == '':
-                content = str(self.score)                
-            elif self.score == int(content):
-                content = content
-                print('igualaste el puntaje más alto')
-            elif self.score > int(content):
                 content = str(self.score)
-                print('superaste el puntaje más alto')
+            elif self.score == int(content):
+                self.score_message = 'Igualaste el puntaje más alto'
+            elif self.score > int(content):
+                self.score_message = '¡Tu puntaje es el más alto!'
+                content = str(self.score)
             else:
-                print('tu puntaje no superó al más alto')
+                self.score_message = 'Tu puntaje no superó al más alto'
 
-            SCORE_DIRECTORY.write_text(content) 
+            SCORE_DIRECTORY.write_text(content)
 
     def read_score(self):
         if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
@@ -232,9 +233,36 @@ class Game:
         self.display_text( self.level_format(), FONT_SIZE, BLACK, 100, POS_Y)
         self.display_text( self.lives_format(), FONT_SIZE, BLACK, (WIDTH - 180), POS_Y, False)
 
-        if not self.playing:
-            self.display_text('Perdiste', FONT_SIZE + 40, BLACK, WIDTH // 2, HEIGHT // 2 - 20)
-            self.display_text('Presiona la BARRA DE ESPACIO para volver a jugar', FONT_SIZE - 10, BLACK, WIDTH // 2, HEIGHT // 2 + 50)
+        if not self.playing:            
+            self.end_menu()
+
+    def end_menu(self):
+        wait = TRUE
+
+        menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu.jpg'))
+        rect = menu_img.get_rect()
+        rect.center = (WIDTH // 2, HEIGHT // 2)
+
+        while wait:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    wait = False
+                    self.running = False
+                    pygame.quit()
+                    sys.exit()
+
+                
+                key = pygame.key.get_pressed()
+                if key[pygame.K_SPACE]:
+                    wait = False
+
+            self.surface.blit(menu_img, rect)
+            self.show_lose_message()
+            pygame.display.update()
+
+    def show_lose_message(self):
+            self.display_text(str(self.score), FONT_SIZE + 40, BLACK, 560 , 245)
+            self.display_text(self.score_message, FONT_SIZE, BLACK, 565 , 325)
 
     def display_text(self, text, size, color, pos_x, pos_y, align_center = True):
         font = pygame.font.Font(self.font, size)
@@ -249,7 +277,7 @@ class Game:
 
         self.surface.blit(text, rect)
 
-    def menu(self):
+    def instructions_menu(self):
         wait = TRUE
 
         menu_img = pygame.image.load(os.path.join(self.dir_images, 'menu.jpg'))
@@ -271,3 +299,32 @@ class Game:
 
             self.surface.blit(menu_img, rect)
             pygame.display.update()
+
+
+    def start_menu(self):
+        wait = TRUE
+
+        menu_img = pygame.image.load(os.path.join(self.dir_images, 'start_menu.jpg'))
+        rect = menu_img.get_rect()
+        rect.center = (WIDTH // 2, HEIGHT // 2)
+
+        while wait:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    wait = False
+                    self.running = False
+                    pygame.quit()
+                    sys.exit()
+
+                
+                key = pygame.key.get_pressed()
+                if key[pygame.K_SPACE]:
+                    wait = False
+
+            self.surface.blit(menu_img, rect)
+            self.show_higher_score()
+            pygame.display.update()
+
+    def show_higher_score(self):
+        higher_score = str(self.read_score())
+        self.display_text(higher_score, FONT_SIZE + 40, BLACK, 560 , 245)
