@@ -28,6 +28,10 @@ class Game:
 
         self.font = pygame.font.match_font(FONT)
 
+        pygame.mixer.music.load('game/sources/sounds/theme.mp3')
+        pygame.mixer.music.set_volume(1.0) # Float 0.0 - 1.0
+        pygame.mixer.music.play(-1, 0.0)
+
     def start(self):
         self.menu()
         self.new()
