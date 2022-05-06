@@ -42,13 +42,9 @@ class Game:
         self.level = 0
         self.lives = LIVES
         self.background = pygame.image.load(os.path.join(self.dir_images, 'background.png'))
-        self.start_score(self.score)
+        # self.start_score(self.score)
         self.generate_elements()
         self.run()
-
-    def start_score(self, score):
-        print('la puntuación actual es de:', score)
-        SCORE_DIRECTORY.write_text(str(score))
 
     def run(self):
         while self.running:
@@ -154,9 +150,33 @@ class Game:
             self.generate_drills()
             self.generate_cookies()
 
+    # def start_score(self, score):
+    #     SCORE_DIRECTORY.write_text(str(score))
+
     def update_score(self):
         self.score += 1
-        SCORE_DIRECTORY.write_text(str(self.score))
+
+    def save_score(self):
+        content = ''
+        if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
+            content = self.read_score()
+                
+            if content == '':
+                content = str(self.score)                
+            elif self.score == int(content):
+                content = content
+                print('igualaste el puntaje más alto')
+            elif self.score > int(content):
+                content = str(self.score)
+                print('superaste el puntaje más alto')
+            else:
+                print('tu puntaje no superó al más alto')
+
+            SCORE_DIRECTORY.write_text(content) 
+
+    def read_score(self):
+        if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
+            return SCORE_DIRECTORY.read_text()
 
     def delete_collided_drill(self, drill):
         self.lost_live()
@@ -172,23 +192,18 @@ class Game:
 
         # Código para terminar el juego
         if self.lives == 0:
+            self.save_score()
             self.stop()
 
     def delete_collided_cookie(self, cookie):
-        # print('galleta')
         sound = pygame.mixer.Sound(os.path.join(self.dir_sound, 'cookie.wav'))
         sound.play()
-        # score = self.read_score(SCORE_DIRECTORY)
         cookie.kill()
 
     def delete_elements(self, elements):
         for element in elements:
             if element.rect.top > HEIGHT - 30:
-                element.kill()
-
-    def read_score(self):
-        if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
-            print(SCORE_DIRECTORY.read_text())
+                element.kill()   
 
     def stop_elements(self, elements):
         for element in elements:
