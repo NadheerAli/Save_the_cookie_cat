@@ -237,7 +237,7 @@ class Game:
     def start_menu(self):
         wait = True
 
-        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'start_menu_2.jpg')
+        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'start_menu.jpg')
         rect = menu_img.get_rect()
         rect.center = (WIDTH // 2, HEIGHT // 2)
 
@@ -270,7 +270,7 @@ class Game:
 
                 if actual_menu == 'controls':
                     if key[pygame.K_LEFT]:
-                        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'start_menu_2.jpg')
+                        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'start_menu.jpg')
                         actual_menu = 'start'
                         show_score = True
 
@@ -279,7 +279,7 @@ class Game:
 
                 if actual_menu == 'credits':
                     if key[pygame.K_RIGHT]:
-                        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'start_menu_2.jpg')
+                        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'start_menu.jpg')
                         actual_menu = 'start'
                         show_score = True
 
