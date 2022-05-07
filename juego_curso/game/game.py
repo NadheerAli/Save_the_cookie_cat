@@ -38,6 +38,7 @@ class Game:
         self.score = 0
         self.level = 0
         self.prev_score = int(self.read_score())
+        self.fall_speed = FALL_SPEED
         self.lives = LIVES
         self.generate_elements()
         self.run()
@@ -63,9 +64,9 @@ class Game:
 
         if len(self.drills) == 0:
             for drill in range(0, DRILLS_PER_LEVEL):
-                left_random = DRILLS_GRID * random.randrange(1, 15)
+                left_random = OBJECT_DROP_AREA * random.randrange(1, 15)
 
-                drill = Drill(left_random, drill_initial_pos_y)
+                drill = Drill(left_random, drill_initial_pos_y, self.fall_speed)
 
                 random_gap_drills = random.randrange(100, DRILLS_GAP)
                 drill_initial_pos_y = drill.rect.top - random_gap_drills
@@ -73,16 +74,21 @@ class Game:
                 self.sprites.add(drill)
                 self.drills.add(drill)
 
-            self.level += 1
+            self.update_level()
             self.generate_cookies()
+
+    def update_level(self):
+        self.level += 1
+        if(self.level % LEVEL_TO_INCREASE_SPEED == 0):
+            self.fall_speed += SPEED_INCREASE
 
     def generate_cookies(self):
         top_last_position = -800
         if len(self.cookies) == 0:
             for cookie in range(0, COOKIES_PER_LEVEL):
-                left_random = DRILLS_GRID * random.randrange(1, 15)
+                left_random = OBJECT_DROP_AREA * random.randrange(1, 15)
 
-                cookie = Cookie(left_random, top_last_position)
+                cookie = Cookie(left_random, top_last_position, self.fall_speed)
 
                 random_gap_cookies = random.randrange(400, COOKIES_GAP)
                 top_last_position = cookie.rect.top - random_gap_cookies
@@ -211,7 +217,6 @@ class Game:
         if not self.playing:            
             self.end_menu()
 
-    
     def show_lose_message(self):
             self.display_text(str(self.score), FONT_SIZE + 40, BLACK, 215 , 240)
             self.display_text(str(self.prev_score), FONT_SIZE + 40, BLACK, 580 , 240)
@@ -228,7 +233,6 @@ class Game:
             rect.y = pos_y
 
         self.surface.blit(text, rect)
-
 
     def start_menu(self):
         wait = True
@@ -284,7 +288,6 @@ class Game:
                 self.show_higher_score()
             pygame.display.update()
 
-    
     def end_menu(self):
         wait = True
 

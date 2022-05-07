@@ -5,7 +5,7 @@ from .config import *
 
 
 class Drill(pygame.sprite.Sprite):
-    def __init__(self, left, top):
+    def __init__(self, left, top, fall_speed):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.image.load(SPRITES_DIRECTORY / 'drill.png')
@@ -14,7 +14,7 @@ class Drill(pygame.sprite.Sprite):
         self.rect.left = left
         self.rect.top = top
 
-        self.vel_y = FALL_SPEED
+        self.vel_y = fall_speed
 
     def update(self):
         pygame.sprite.Sprite.update(self)

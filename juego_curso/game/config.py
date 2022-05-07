@@ -14,6 +14,8 @@ BLACK = (0, 0, 0)
 LIVES = 3
 GAME_VOL = 0.8
 FPS = 60
+LEVEL_TO_INCREASE_SPEED = 5
+SPEED_INCREASE = 1
 
 # Font
 FONT = 'Arial bold'
@@ -23,15 +25,14 @@ FONT_SIZE = 36
 # Player
 PLAYER_SPEED = 10
 
-
 # Objects
 DRILLS_GAP = 300
 COOKIES_GAP = 800
-SURFACE_MARGIN_LEFT = 0
 SURFACE_MARGIN_RIGHT = WIDTH - 70
 FALL_SPEED = 10
 DRILLS_PER_LEVEL = 8
 COOKIES_PER_LEVEL = 5
+OBJECT_DROP_AREA = int((SURFACE_MARGIN_RIGHT) / 14)
 
 # Paths
 CURRENT_DIRECTORY = Path.cwd()
@@ -40,6 +41,3 @@ PATH = Path(CURRENT_DIRECTORY)
 SCORE_DIRECTORY = PATH / 'game/sources/score.txt'
 SOUNDS_DIRECTORY = PATH / 'game/sources/sounds/'
 SPRITES_DIRECTORY = PATH / 'game/sources/sprites/'
-
-# Hasta aquí sigue la posibilidad de que aparezcan en un mismo espacio
-DRILLS_GRID = int((SURFACE_MARGIN_RIGHT - SURFACE_MARGIN_LEFT) / 14) # 730 - área en el que puede aparacer

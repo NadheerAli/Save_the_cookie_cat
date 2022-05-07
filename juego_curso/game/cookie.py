@@ -1,9 +1,8 @@
-import os
 import pygame
 from .config import *
 
 class Cookie(pygame.sprite.Sprite):
-    def __init__(self, left, top):
+    def __init__(self, left, top, fall_speed):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.image.load(SPRITES_DIRECTORY / 'cookie_cat.png')
@@ -11,9 +10,8 @@ class Cookie(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.left = left
         self.rect.top = top
-        self.vel_y = FALL_SPEED
+        self.vel_y = fall_speed
 
-    # Ajustar velocidad de caída
     def update(self):
         pygame.sprite.Sprite.update(self)
         self.rect.top += self.vel_y
