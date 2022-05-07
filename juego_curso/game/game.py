@@ -1,3 +1,4 @@
+from dis import show_code
 import os
 from pickle import TRUE
 import pygame
@@ -34,7 +35,6 @@ class Game:
 
     def start(self):
         self.start_menu()
-        self.instructions_menu()
         self.new()
 
     def new(self):
@@ -107,21 +107,22 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
-            
-
         # Este código ejecuta continuamente porque el atributo running sigue siendo true
         key = pygame.key.get_pressed()
+
+        if key[pygame.K_LEFT] and not self.playing:
+            self.start()
+            
+        if key[pygame.K_SPACE] and not self.playing:
+            self.new()
+
         if key[pygame.K_LEFT]:
             self.player.update_pos_left()
 
         if key[pygame.K_RIGHT]:
             self.player.update_pos_right()
 
-        if key[pygame.K_SPACE] and not self.playing:
-            self.new()
 
-        # Se llama aquí porque no se actualiza la posición con update() en el archivo Drill
-        # self.drill.update_pos()
 
 
     def draw(self):
@@ -236,30 +237,7 @@ class Game:
         if not self.playing:            
             self.end_menu()
 
-    def end_menu(self):
-        wait = TRUE
-
-        menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu.jpg'))
-        rect = menu_img.get_rect()
-        rect.center = (WIDTH // 2, HEIGHT // 2)
-
-        while wait:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    wait = False
-                    self.running = False
-                    pygame.quit()
-                    sys.exit()
-
-                
-                key = pygame.key.get_pressed()
-                if key[pygame.K_SPACE]:
-                    wait = False
-
-            self.surface.blit(menu_img, rect)
-            self.show_lose_message()
-            pygame.display.update()
-
+    
     def show_lose_message(self):
             self.display_text(str(self.score), FONT_SIZE + 40, BLACK, 560 , 245)
             self.display_text(self.score_message, FONT_SIZE, BLACK, 565 , 325)
@@ -277,34 +255,77 @@ class Game:
 
         self.surface.blit(text, rect)
 
-    def instructions_menu(self):
-        wait = TRUE
+    # def instructions_menu(self):
+    #     wait = TRUE
 
-        menu_img = pygame.image.load(os.path.join(self.dir_images, 'menu.jpg'))
-        rect = menu_img.get_rect()
-        rect.center = (WIDTH // 2, HEIGHT // 2)
+    #     menu_img = pygame.image.load(os.path.join(self.dir_images, 'menu.jpg'))
+    #     rect = menu_img.get_rect()
+    #     rect.center = (WIDTH // 2, HEIGHT // 2)
 
-        while wait:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    wait = False
-                    self.running = False
-                    pygame.quit()
-                    sys.exit()
+    #     while wait:
+    #         for event in pygame.event.get():
+    #             if event.type == pygame.QUIT:
+    #                 wait = False
+    #                 self.running = False
+    #                 pygame.quit()
+    #                 sys.exit()
 
                 
-                key = pygame.key.get_pressed()
-                if key[pygame.K_SPACE]:
-                    wait = False
+    #             key = pygame.key.get_pressed()
+    #             if key[pygame.K_SPACE]:
+    #                 wait = False
 
-            self.surface.blit(menu_img, rect)
-            pygame.display.update()
+    #         self.surface.blit(menu_img, rect)
+    #         pygame.display.update()
 
 
     def start_menu(self):
         wait = TRUE
 
-        menu_img = pygame.image.load(os.path.join(self.dir_images, 'start_menu.jpg'))
+        menu_img = pygame.image.load(os.path.join(self.dir_images, 'start_menu_2.jpg'))
+        rect = menu_img.get_rect()
+        rect.center = (WIDTH // 2, HEIGHT // 2)
+
+        actual_menu = 'start'
+        show_score = True
+
+        while wait:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    wait = False
+                    self.running = False
+                    pygame.quit()
+                    sys.exit()
+
+                key = pygame.key.get_pressed()
+
+                if actual_menu == 'start':
+                    if key[pygame.K_RIGHT]:
+                        menu_img = pygame.image.load(os.path.join(self.dir_images, 'controls_menu.jpg'))
+                        actual_menu = 'controls'
+                        show_score = False                        
+
+                    if key[pygame.K_SPACE]:
+                        wait = False
+
+                if actual_menu == 'controls':
+                    if key[pygame.K_LEFT]:
+                        menu_img = pygame.image.load(os.path.join(self.dir_images, 'start_menu_2.jpg'))
+                        actual_menu = 'start'
+                        show_score = True
+
+                    if key[pygame.K_SPACE]:
+                        wait = False
+
+            self.surface.blit(menu_img, rect)
+            if show_score:
+                self.show_higher_score()
+            pygame.display.update()
+
+    def end_menu(self):
+        wait = TRUE
+
+        menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu_2.jpg'))
         rect = menu_img.get_rect()
         rect.center = (WIDTH // 2, HEIGHT // 2)
 
@@ -315,16 +336,19 @@ class Game:
                     self.running = False
                     pygame.quit()
                     sys.exit()
-
-                
+                    
                 key = pygame.key.get_pressed()
                 if key[pygame.K_SPACE]:
                     wait = False
 
+                if key[pygame.K_LEFT]:
+                    wait = False
+
             self.surface.blit(menu_img, rect)
-            self.show_higher_score()
+            self.show_lose_message()
             pygame.display.update()
+
 
     def show_higher_score(self):
         higher_score = str(self.read_score())
-        self.display_text(higher_score, FONT_SIZE + 40, BLACK, 560 , 245)
+        self.display_text(higher_score, FONT_SIZE + 40, BLACK, 560 , 205)
