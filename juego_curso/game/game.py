@@ -33,6 +33,8 @@ class Game:
         pygame.mixer.music.set_volume(GAME_VOL) # Float 0.0 - 1.0
         pygame.mixer.music.play(-1, 0.0)
 
+        
+
     def start(self):
         self.start_menu()
         self.new()
@@ -42,6 +44,7 @@ class Game:
         self.score = 0
         self.level = 0
         self.score_message = ''
+        self.prev_score = int(self.read_score())
         self.lives = LIVES
         self.background = pygame.image.load(os.path.join(self.dir_images, 'background.png'))
         # self.start_score(self.score)
@@ -110,7 +113,7 @@ class Game:
         # Este código ejecuta continuamente porque el atributo running sigue siendo true
         key = pygame.key.get_pressed()
 
-        if key[pygame.K_LEFT] and not self.playing:
+        if key[pygame.K_f] and not self.playing:
             self.start()
             
         if key[pygame.K_SPACE] and not self.playing:
@@ -239,8 +242,9 @@ class Game:
 
     
     def show_lose_message(self):
-            self.display_text(str(self.score), FONT_SIZE + 40, BLACK, 560 , 245)
-            self.display_text(self.score_message, FONT_SIZE, BLACK, 565 , 325)
+            self.display_text(str(self.score), FONT_SIZE + 40, BLACK, 215 , 240)
+            self.display_text(str(self.prev_score), FONT_SIZE + 40, BLACK, 580 , 240)
+            # self.display_text(self.score_message, FONT_SIZE, BLACK, 565 , 325)
 
     def display_text(self, text, size, color, pos_x, pos_y, align_center = True):
         font = pygame.font.Font(self.font, size)
@@ -254,29 +258,6 @@ class Game:
             rect.y = pos_y
 
         self.surface.blit(text, rect)
-
-    # def instructions_menu(self):
-    #     wait = TRUE
-
-    #     menu_img = pygame.image.load(os.path.join(self.dir_images, 'menu.jpg'))
-    #     rect = menu_img.get_rect()
-    #     rect.center = (WIDTH // 2, HEIGHT // 2)
-
-    #     while wait:
-    #         for event in pygame.event.get():
-    #             if event.type == pygame.QUIT:
-    #                 wait = False
-    #                 self.running = False
-    #                 pygame.quit()
-    #                 sys.exit()
-
-                
-    #             key = pygame.key.get_pressed()
-    #             if key[pygame.K_SPACE]:
-    #                 wait = False
-
-    #         self.surface.blit(menu_img, rect)
-    #         pygame.display.update()
 
 
     def start_menu(self):
@@ -305,6 +286,11 @@ class Game:
                         actual_menu = 'controls'
                         show_score = False                        
 
+                    if key[pygame.K_LEFT]:
+                        menu_img = pygame.image.load(os.path.join(self.dir_images, 'credits.jpg'))
+                        actual_menu = 'credits'
+                        show_score = False                        
+
                     if key[pygame.K_SPACE]:
                         wait = False
 
@@ -317,6 +303,12 @@ class Game:
                     if key[pygame.K_SPACE]:
                         wait = False
 
+                if actual_menu == 'credits':
+                    if key[pygame.K_RIGHT]:
+                        menu_img = pygame.image.load(os.path.join(self.dir_images, 'start_menu_2.jpg'))
+                        actual_menu = 'start'
+                        show_score = True
+
             self.surface.blit(menu_img, rect)
             if show_score:
                 self.show_higher_score()
@@ -324,8 +316,16 @@ class Game:
 
     def end_menu(self):
         wait = TRUE
+        menu_img = ''
 
-        menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu_2.jpg'))
+        if self.score > self.prev_score:
+            menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu_new_record.jpg'))
+        elif self.score < self.prev_score:
+            menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu_lower_score.jpg'))
+        else:
+            menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu_higher_score.jpg'))
+        
+        
         rect = menu_img.get_rect()
         rect.center = (WIDTH // 2, HEIGHT // 2)
 
@@ -341,7 +341,7 @@ class Game:
                 if key[pygame.K_SPACE]:
                     wait = False
 
-                if key[pygame.K_LEFT]:
+                if key[pygame.K_f]:
                     wait = False
 
             self.surface.blit(menu_img, rect)
@@ -351,4 +351,4 @@ class Game:
 
     def show_higher_score(self):
         higher_score = str(self.read_score())
-        self.display_text(higher_score, FONT_SIZE + 40, BLACK, 560 , 205)
+        self.display_text(higher_score, FONT_SIZE + 40, BLACK, 560 , 245)
