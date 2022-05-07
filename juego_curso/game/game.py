@@ -1,13 +1,8 @@
-from dis import show_code
-import os
-from pickle import TRUE
 import pygame
 import sys
 import random
-from pathlib import Path
 
 from .config import * 
-from .platform import Platform 
 from .player import Player 
 from .drill import Drill 
 from .cookie import Cookie 
@@ -18,22 +13,21 @@ class Game:
 
         self.surface = pygame.display.set_mode((WIDTH,HEIGHT))
         pygame.display.set_caption(TITLE)
+        
         self.running = True
         
-
         self.clock = pygame.time.Clock()
+        self.clock.tick(FPS)
 
-        self.dir = os.path.dirname(__file__)
-        self.dir_sound = os.path.join(self.dir, 'sources/sounds/')
-        self.dir_images = os.path.join(self.dir, 'sources/sprites/')
+        self.background = pygame.image.load(SPRITES_DIRECTORY / 'background.png')
 
         self.font = pygame.font.match_font(FONT)
+        self.play_theme()
 
-        pygame.mixer.music.load('game/sources/sounds/theme.mp3')
-        pygame.mixer.music.set_volume(GAME_VOL) # Float 0.0 - 1.0
+    def play_theme(self):
+        pygame.mixer.music.load(SOUNDS_DIRECTORY / 'theme.mp3')
+        pygame.mixer.music.set_volume(GAME_VOL)
         pygame.mixer.music.play(-1, 0.0)
-
-        
 
     def start(self):
         self.start_menu()
@@ -43,46 +37,38 @@ class Game:
         self.playing = True
         self.score = 0
         self.level = 0
-        self.score_message = ''
         self.prev_score = int(self.read_score())
         self.lives = LIVES
-        self.background = pygame.image.load(os.path.join(self.dir_images, 'background.png'))
-        # self.start_score(self.score)
         self.generate_elements()
         self.run()
 
     def run(self):
         while self.running:
-            self.clock.tick(FPS)
             self.events()
             self.update()
             self.draw()
 
     def generate_elements(self):
-        self.platform = Platform()
-        self.player = Player(100, self.platform.rect.top, self.dir_images)
-
-        # Ajustar margen de aparición en lado derecho
-        # self.drill = Drill(random.randrange(100, WIDTH-100), 0)
+        self.player = Player(100, HEIGHT - 30)
 
         self.sprites = pygame.sprite.Group()
         self.drills = pygame.sprite.Group()
         self.cookies = pygame.sprite.Group()
         
-        self.sprites.add(self.platform)
         self.sprites.add(self.player)
         self.generate_drills()
         
     def generate_drills(self):
-        top_last_position = -100
+        drill_initial_pos_y = -100
+
         if len(self.drills) == 0:
-            for drill in range(0, MAX_DRILLS):
+            for drill in range(0, DRILLS_PER_LEVEL):
                 left_random = DRILLS_GRID * random.randrange(1, 15)
 
-                drill = Drill(left_random, top_last_position, self.dir_images)
+                drill = Drill(left_random, drill_initial_pos_y)
 
                 random_gap_drills = random.randrange(100, DRILLS_GAP)
-                top_last_position = drill.rect.top - random_gap_drills
+                drill_initial_pos_y = drill.rect.top - random_gap_drills
 
                 self.sprites.add(drill)
                 self.drills.add(drill)
@@ -93,10 +79,10 @@ class Game:
     def generate_cookies(self):
         top_last_position = -800
         if len(self.cookies) == 0:
-            for cookie in range(0, MAX_COOKIES):
+            for cookie in range(0, COOKIES_PER_LEVEL):
                 left_random = DRILLS_GRID * random.randrange(1, 15)
 
-                cookie = Cookie(left_random, top_last_position, self.dir_images)
+                cookie = Cookie(left_random, top_last_position)
 
                 random_gap_cookies = random.randrange(400, COOKIES_GAP)
                 top_last_position = cookie.rect.top - random_gap_cookies
@@ -110,7 +96,6 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
-        # Este código ejecuta continuamente porque el atributo running sigue siendo true
         key = pygame.key.get_pressed()
 
         if key[pygame.K_f] and not self.playing:
@@ -125,9 +110,6 @@ class Game:
         if key[pygame.K_RIGHT]:
             self.player.update_pos_right()
 
-
-
-
     def draw(self):
         self.surface.blit(self.background, (0,0))
         self.sprites.draw(self.surface)
@@ -136,7 +118,6 @@ class Game:
 
     def update(self):
         if self.playing:
-            # Ejecuta los métodos update de los sprites
             self.sprites.update()
 
             drill = self.player.collide_with(self.drills)
@@ -156,9 +137,6 @@ class Game:
             self.generate_drills()
             self.generate_cookies()
 
-    # def start_score(self, score):
-    #     SCORE_DIRECTORY.write_text(str(score))
-
     def update_score(self):
         self.score += 1
 
@@ -167,41 +145,34 @@ class Game:
         if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
             content = self.read_score()
                 
-            if content == '':
+            if self.score > int(content):
                 content = str(self.score)
-            elif self.score == int(content):
-                self.score_message = 'Igualaste el puntaje más alto'
-            elif self.score > int(content):
-                self.score_message = '¡Tu puntaje es el más alto!'
-                content = str(self.score)
-            else:
-                self.score_message = 'Tu puntaje no superó al más alto'
 
             SCORE_DIRECTORY.write_text(content)
 
     def read_score(self):
         if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
+            content = SCORE_DIRECTORY.read_text()
+            if content == '':
+                SCORE_DIRECTORY.write_text('0')
+
             return SCORE_DIRECTORY.read_text()
 
     def delete_collided_drill(self, drill):
         self.lost_live()
-        sound = pygame.mixer.Sound(os.path.join(self.dir_sound, 'drill.wav'))
+        sound = pygame.mixer.Sound(SOUNDS_DIRECTORY / 'drill.wav')
         sound.play()
         drill.kill()
 
     def lost_live(self):
         self.lives -= 1
         
-        # Código para mostrar una vida menos
-        print('tienes', self.lives, 'vidas')
-
-        # Código para terminar el juego
         if self.lives == 0:
             self.save_score()
             self.stop()
 
     def delete_collided_cookie(self, cookie):
-        sound = pygame.mixer.Sound(os.path.join(self.dir_sound, 'cookie.wav'))
+        sound = pygame.mixer.Sound(SOUNDS_DIRECTORY / 'cookie.wav')
         sound.play()
         cookie.kill()
 
@@ -244,7 +215,6 @@ class Game:
     def show_lose_message(self):
             self.display_text(str(self.score), FONT_SIZE + 40, BLACK, 215 , 240)
             self.display_text(str(self.prev_score), FONT_SIZE + 40, BLACK, 580 , 240)
-            # self.display_text(self.score_message, FONT_SIZE, BLACK, 565 , 325)
 
     def display_text(self, text, size, color, pos_x, pos_y, align_center = True):
         font = pygame.font.Font(self.font, size)
@@ -261,9 +231,9 @@ class Game:
 
 
     def start_menu(self):
-        wait = TRUE
+        wait = True
 
-        menu_img = pygame.image.load(os.path.join(self.dir_images, 'start_menu_2.jpg'))
+        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'start_menu_2.jpg')
         rect = menu_img.get_rect()
         rect.center = (WIDTH // 2, HEIGHT // 2)
 
@@ -282,12 +252,12 @@ class Game:
 
                 if actual_menu == 'start':
                     if key[pygame.K_RIGHT]:
-                        menu_img = pygame.image.load(os.path.join(self.dir_images, 'controls_menu.jpg'))
+                        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'controls_menu.jpg')
                         actual_menu = 'controls'
                         show_score = False                        
 
                     if key[pygame.K_LEFT]:
-                        menu_img = pygame.image.load(os.path.join(self.dir_images, 'credits.jpg'))
+                        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'credits.jpg')
                         actual_menu = 'credits'
                         show_score = False                        
 
@@ -296,7 +266,7 @@ class Game:
 
                 if actual_menu == 'controls':
                     if key[pygame.K_LEFT]:
-                        menu_img = pygame.image.load(os.path.join(self.dir_images, 'start_menu_2.jpg'))
+                        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'start_menu_2.jpg')
                         actual_menu = 'start'
                         show_score = True
 
@@ -305,7 +275,7 @@ class Game:
 
                 if actual_menu == 'credits':
                     if key[pygame.K_RIGHT]:
-                        menu_img = pygame.image.load(os.path.join(self.dir_images, 'start_menu_2.jpg'))
+                        menu_img = pygame.image.load(SPRITES_DIRECTORY / 'start_menu_2.jpg')
                         actual_menu = 'start'
                         show_score = True
 
@@ -314,18 +284,12 @@ class Game:
                 self.show_higher_score()
             pygame.display.update()
 
+    
     def end_menu(self):
-        wait = TRUE
-        menu_img = ''
+        wait = True
 
-        if self.score > self.prev_score:
-            menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu_new_record.jpg'))
-        elif self.score < self.prev_score:
-            menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu_lower_score.jpg'))
-        else:
-            menu_img = pygame.image.load(os.path.join(self.dir_images, 'end_menu_higher_score.jpg'))
-        
-        
+        menu_img = self.get_end_menu_img()
+
         rect = menu_img.get_rect()
         rect.center = (WIDTH // 2, HEIGHT // 2)
 
@@ -348,6 +312,16 @@ class Game:
             self.show_lose_message()
             pygame.display.update()
 
+    def get_end_menu_img(self):
+        menu_img = ''
+        if self.score > self.prev_score:
+            menu_img = pygame.image.load(SPRITES_DIRECTORY / 'end_menu_new_record.jpg')
+        elif self.score < self.prev_score:
+            menu_img = pygame.image.load(SPRITES_DIRECTORY / 'end_menu_lower_score.jpg')
+        else:
+            menu_img = pygame.image.load(SPRITES_DIRECTORY / 'end_menu_higher_score.jpg')
+
+        return menu_img
 
     def show_higher_score(self):
         higher_score = str(self.read_score())
