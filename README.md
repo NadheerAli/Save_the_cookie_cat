@@ -30,6 +30,31 @@ Ten cuidado de no borrar algún archivo del directorio ya que esto provocaria er
 
 Nota: en caso de querer restaurar el puntaje más alto del juego, solo es necesario ir al archivo `game/sources/score.txt` y sobreescribir su contenido por un 0 o dejarlo vacio.
 
+## Configuración
+
+La configuración de los valores del juego se realizan desde el archivo `config.py`.
+
+Estas con las variables encargadas de la jugabilidad y solo esas deben modificarse para evitar acciones inesperadas en el juego:
+
+```python
+
+# Velocidad con la que se mueve el personaje
+PLAYER_SPEED = 10
+
+# Número de niveles que deben pasar para aumentar la velocidad con que caen los taladros
+LEVEL_TO_INCREASE_SPEED = 5
+
+# Cantidad en la que debe aumentar la velocidad
+SPEED_INCREASE = 1
+
+# Velocidad de caída por defecto
+FALL_SPEED = 10
+
+# Número de taladros y galletas que deben aparecer por nivel
+DRILLS_PER_LEVEL = 8
+COOKIES_PER_LEVEL = 5
+```
+
 ## Información:
 
 -   Desarrollado por: [@Javier57](https://github.com/Javieer57)

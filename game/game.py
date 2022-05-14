@@ -64,7 +64,7 @@ class Game:
 
         if len(self.drills) == 0:
             for drill in range(0, DRILLS_PER_LEVEL):
-                left_random = OBJECT_DROP_AREA * random.randrange(1, 15)
+                left_random = COLUMN_FOR_OBJECTS_FALL * random.randrange(0, 15)
 
                 drill = Drill(left_random, drill_initial_pos_y, self.fall_speed)
 
@@ -86,7 +86,7 @@ class Game:
         top_last_position = -800
         if len(self.cookies) == 0:
             for cookie in range(0, COOKIES_PER_LEVEL):
-                left_random = OBJECT_DROP_AREA * random.randrange(1, 15)
+                left_random = COLUMN_FOR_OBJECTS_FALL * random.randrange(0, 15)
 
                 cookie = Cookie(left_random, top_last_position, self.fall_speed)
 
