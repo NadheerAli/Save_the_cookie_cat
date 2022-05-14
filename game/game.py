@@ -147,14 +147,12 @@ class Game:
         self.score += 1
 
     def save_score(self):
-        content = ''
         if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
-            content = self.read_score()
-                
-            if self.score > int(content):
-                content = str(self.score)
 
-            SCORE_DIRECTORY.write_text(content)
+            if self.score > self.prev_score:
+                new_score = str(self.score)
+
+                SCORE_DIRECTORY.write_text(new_score)
 
     def read_score(self):
         if SCORE_DIRECTORY.exists() and SCORE_DIRECTORY.name == 'score.txt':
